@@ -12,10 +12,11 @@ import Data.Data
 import Data.Foldable
 import Data.Monoid
 import Data.Traversable
-import Physics.V2
-import Physics.V3
+import Physics.Epsilon
 import Physics.Metric
 import Physics.Rep
+import Physics.V2
+import Physics.V3
 
 data V4 a = V4 a a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -77,3 +78,6 @@ vector (V3 a b c) = V4 a b c 0
 
 point :: Num a => V3 a -> V4 a
 point (V3 a b c) = V4 a b c 1
+
+instance Epsilon a => Epsilon (V4 a) where
+  nearZero = nearZero . quadrance

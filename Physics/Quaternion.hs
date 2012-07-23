@@ -22,12 +22,13 @@ import Data.Distributive
 import Data.Foldable
 import Data.Monoid
 import Data.Traversable
+import Physics.Epsilon
 import Physics.Involutive
 import Physics.Lens
 import Physics.Metric
 import Physics.Rep
-import Physics.Vector
 import Physics.V3
+import Physics.Vector
 import Prelude hiding (any)
 
 data Quaternion a = Quaternion a a a a deriving (Eq,Ord,Read,Show,Data,Typeable)
@@ -294,3 +295,6 @@ rotate (Quaternion a' b c d) (V3 x y z) = V3
     t10 = -d*d
 {-# SPECIALIZE rotate :: Quaternion Float -> V3 Float -> V3 Float #-}
 {-# SPECIALIZE rotate :: Quaternion Double -> V3 Double -> V3 Double #-}
+
+instance (RealFloat a, Epsilon a) => Epsilon (Quaternion a) where
+  nearZero = nearZero . quadrance

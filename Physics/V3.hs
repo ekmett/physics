@@ -12,10 +12,11 @@ import Data.Distributive
 import Data.Foldable
 import Data.Traversable
 import Data.Monoid
-import Physics.Metric
+import Physics.Epsilon
 import Physics.Lens
-import Physics.V2
+import Physics.Metric
 import Physics.Rep
+import Physics.V2
 
 data V3 a = V3 a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -78,3 +79,6 @@ cross (V3 a b c) (V3 d e f) = V3 (b*f-c*e) (c*d-a*f) (a*e-b*d)
 -- | scalar triple product
 triple :: Num a => V3 a -> V3 a -> V3 a -> a
 triple a b c = dot a (cross b c)
+
+instance Epsilon a => Epsilon (V3 a) where
+  nearZero = nearZero . quadrance

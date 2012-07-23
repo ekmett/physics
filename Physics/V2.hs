@@ -16,6 +16,7 @@ import Control.Applicative
 import Physics.Lens
 import Physics.Metric
 import Physics.Rep
+import Physics.Epsilon
 
 data V2 a = V2 a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -77,3 +78,6 @@ instance Distributive V2 where
 -- the counter-clockwise perpendicular vector
 perp :: Num a => V2 a -> V2 a
 perp (V2 a b) = V2 (negate b) a
+
+instance Epsilon a => Epsilon (V2 a) where
+  nearZero = nearZero . quadrance

@@ -33,6 +33,7 @@ library
 
   exposed-modules:
     Physics.AABB
+    Physics.Epsilon
     Physics.Friction
     Physics.Geometry
     Physics.Geometry.Sphere
@@ -41,7 +42,9 @@ library
     Physics.Material
     Physics.Matrix
     Physics.Metric
+    Physics.Plucker
     Physics.Quaternion
+    Physics.Rep
     Physics.Simulation
     Physics.V2
     Physics.V3
