@@ -42,11 +42,7 @@ instance Applicative Quaternion where
 
 instance Monad Quaternion where
   return = pure
-  Quaternion e i j k >>= f = Quaternion e' i' j' k'
-    where Quaternion e' _ _ _ = f e
-          Quaternion _ i' _ _ = f i
-          Quaternion _ _ j' _ = f j
-          Quaternion _ _ _ k' = f k
+  (>>=) = bindRep
 
 instance Rep Quaternion where
   rep f = Quaternion (f e) (f i) (f j) (f k)
