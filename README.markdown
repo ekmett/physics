@@ -3,7 +3,7 @@ physics
 
 [![Build Status](https://secure.travis-ci.org/ekmett/physics.png?branch=master)](http://travis-ci.org/ekmett/physics)
 
-This package is intended to provide a simple rigid body physics engine.
+This package is intended to provide a rigid-body physics engine and to provide me with a playground for working with representations of lens families.
 
 Contact Information
 -------------------
