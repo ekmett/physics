@@ -23,27 +23,29 @@ library
   other-extensions: DeriveDataTypeable
 
   build-depends:
-    base         == 4.*,
-    data-default == 0.5.*,
-    distributive >= 0.2.2   && < 0.3,
-    transformers >= 0.2     && < 0.4,
-    containers   >= 0.3     && < 0.6,
-    semigroups   >= 0.8.3   && < 0.9
+    base                   == 4.*,
+    containers             >= 0.3     && < 0.6,
+    data-default           == 0.5.*,
+    distributive           >= 0.2.2   && < 0.3,
+    representable-functors == 3.0.*,
+    transformers           >= 0.2     && < 0.4,
+    semigroups             >= 0.8.3   && < 0.9
 
   exposed-modules:
     Physics.AABB
-    Physics.Material
     Physics.Friction
     Physics.Geometry
     Physics.Geometry.Sphere
     Physics.Involutive
     Physics.Lens
+    Physics.Material
+    Physics.Matrix
+    Physics.Metric
     Physics.Quaternion
     Physics.Simulation
     Physics.V2
     Physics.V3
     Physics.V4
     Physics.Vector
-    Physics.Metric
 
   ghc-options: -Wall -fno-warn-name-shadowing

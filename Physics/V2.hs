@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE TypeFamilies #-}
 -- {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 module Physics.V2
   ( V2(..)
