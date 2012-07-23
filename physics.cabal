@@ -1,0 +1,48 @@
+name:          physics
+category:      Game, Physics
+version:       0.1
+license:       BSD3
+cabal-version: >= 1.6
+license-file:  LICENSE
+author:        Edward A. Kmett
+maintainer:    Edward A. Kmett <ekmett@gmail.com>
+stability:     experimental
+homepage:      http://github.com/ekmett/physics/
+bug-reports:   http://github.com/ekmett/physics/issues
+copyright:     Copyright (C) 2012 Edward A. Kmett
+synopsis:      Rigid body collisions
+description:   Rigid body collisions
+build-type:    Simple
+extra-source-files: .travis.yml
+
+source-repository head
+  type: git
+  location: git://github.com/ekmett/physics.git
+
+library
+  other-extensions: DeriveDataTypeable
+
+  build-depends:
+    base         == 4.*,
+    data-default == 0.5.*,
+    distributive >= 0.2.2   && < 0.3,
+    transformers >= 0.2     && < 0.4,
+    containers   >= 0.3     && < 0.6,
+    semigroups   >= 0.8.3   && < 0.9
+
+  exposed-modules:
+    Physics.AABB
+    Physics.Material
+    Physics.Friction
+    Physics.Geometry
+    Physics.Geometry.Sphere
+    Physics.Involutive
+    Physics.Lens
+    Physics.Quaternion
+    Physics.Simulation
+    Physics.V2
+    Physics.V3
+    Physics.Vector
+    Physics.Metric
+
+  ghc-options: -Wall -fno-warn-name-shadowing
