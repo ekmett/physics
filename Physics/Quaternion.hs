@@ -3,7 +3,6 @@ module Physics.Quaternion
   ( Quaternion(..)
   , Complicated(..)
   , Hamiltonian(..)
-  , ijk
   , slerp
   , asinq
   , acosq
@@ -124,10 +123,13 @@ instance Complicated Quaternion where
 class Complicated t => Hamiltonian t where
   j :: Functor f => (a -> f a) -> t a -> f (t a)
   k :: Functor f => (a -> f a) -> t a -> f (t a)
+  ijk :: Functor f => (V3 a -> f (V3 a)) -> t a -> f (t a)
 
 instance Hamiltonian Quaternion where
   j f (Quaternion a b c d) = (\c' -> Quaternion a b c' d) <$> f c
   k f (Quaternion a b c d) = Quaternion a b c <$> f d
+
+  ijk f (Quaternion a b c d) = (\(V3 b' c' d') -> Quaternion a b' c' d') <$> f (V3 b c d)
 
 instance Distributive Quaternion where
   distribute f = Quaternion (fmap (^.e) f) (fmap (^.i) f) (fmap (^.j) f) (fmap (^.k) f)
@@ -148,9 +150,6 @@ reimagine r s (Quaternion _ i j k)
 qi :: Num a => Quaternion a -> a
 qi (Quaternion _ i j k) = i*i + j*j + k*k
 
--- lens to access the imaginary part of a quaternion
-ijk :: Functor f => (V3 a -> f (V3 a)) -> Quaternion a -> f (Quaternion a)
-ijk f (Quaternion a b c d) = (\(V3 b' c' d') -> Quaternion a b' c' d') <$> f (V3 b c d)
 
 absImag :: Floating a => Quaternion a -> a
 absImag = sqrt . qi
