@@ -10,8 +10,8 @@ stability:     experimental
 homepage:      http://github.com/ekmett/physics/
 bug-reports:   http://github.com/ekmett/physics/issues
 copyright:     Copyright (C) 2012 Edward A. Kmett
-synopsis:      Rigid body collisions
-description:   Rigid body collisions
+synopsis:      Rigid body physics
+description:   Rigid body physics
 build-type:    Simple
 extra-source-files: .travis.yml
 
@@ -42,6 +42,7 @@ library
     Physics.Simulation
     Physics.V2
     Physics.V3
+    Physics.V4
     Physics.Vector
     Physics.Metric
 

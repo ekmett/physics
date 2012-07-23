@@ -7,29 +7,39 @@ module Physics.V4
   , D4(..)
   ) where
 
+import Control.Applicative
 import Data.Data
-import Data.Functor
-import Physics.Axes
-import Physics.Algebra
+import Data.Foldable
+import Data.Monoid
+import Data.Traversable
+import Physics.V2
+import Physics.V3
+import Physics.Metric
 
 data V4 a = V4 a a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
 instance Functor V4 where
   fmap f (V4 a b c d) = V4 (f a) (f b) (f c) (f d)
 
+instance Foldable V4 where
+  foldMap f (V4 a b c d) = f a `mappend` f b `mappend` f c `mappend` f d
+
+instance Traversable V4 where
+  traverse f (V4 a b c d) = V4 <$> f a <*> f b <*> f c <*> f d
+
 instance Applicative V4 where
   pure a = V4 a a a a
   V4 a b c d <*> V4 e f g h = V4 (a e) (b f) (c g) (d h)
 
 instance Monad V4 where
-  return a = V4 a a a
-  V4 a b c d >>= f = V4 x y z w where
-    V4 x _ _ _ = f a
-    V4 _ y _ _ = f b
-    V4 _ _ z _ = f c
-    V4 _ _ _ w = f d
+  return a = V4 a a a a
+  V4 a b c d >>= f = V4 a' b' c' d' where
+    V4 a' _ _ _ = f a
+    V4 _ b' _ _ = f b
+    V4 _ _ c' _ = f c
+    V4 _ _ _ d' = f d
 
-instance Num V4 where
+instance Num a => Num (V4 a) where
   (+) = liftA2 (+)
   (*) = liftA2 (*)
   negate = fmap negate
@@ -37,7 +47,7 @@ instance Num V4 where
   signum = fmap signum
   fromInteger = pure . fromInteger
 
-instance Fractional V4 where
+instance Fractional a => Fractional (V4 a) where
   recip = fmap recip
   (/) = liftA2 (/)
   fromRational = pure . fromRational
@@ -60,7 +70,7 @@ instance D3 V4 where
 
 instance D4 V4 where
   w f (V4 a b c d) = V4 a b c <$> f d
-  xywz = id
+  xyzw = id
 
 vector :: Num a => V3 a -> V4 a
 vector (V3 a b c) = V4 a b c 0

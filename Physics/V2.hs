@@ -8,6 +8,9 @@ module Physics.V2
 
 import Data.Data
 import Data.Distributive
+import Data.Foldable
+import Data.Traversable
+import Data.Monoid
 import Control.Applicative
 import Physics.Metric
 import Physics.Lens
@@ -16,6 +19,12 @@ data V2 a = V2 a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
 instance Functor V2 where
   fmap f (V2 a b) = V2 (f a) (f b)
+
+instance Foldable V2 where
+  foldMap f (V2 a b) = f a `mappend` f b
+
+instance Traversable V2 where
+  traverse f (V2 a b) = V2 <$> f a <*> f b
 
 instance Applicative V2 where
   pure a = V2 a a
