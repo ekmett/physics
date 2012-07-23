@@ -25,6 +25,7 @@ import Data.Traversable
 import Physics.Involutive
 import Physics.Lens
 import Physics.Metric
+import Physics.Rep
 import Physics.Vector
 import Physics.V3
 import Prelude hiding (any)
@@ -46,6 +47,9 @@ instance Monad Quaternion where
           Quaternion _ i' _ _ = f i
           Quaternion _ _ j' _ = f j
           Quaternion _ _ _ k' = f k
+
+instance Rep Quaternion where
+  rep f = Quaternion (f e) (f i) (f j) (f k)
 
 instance Foldable Quaternion where
   foldMap f (Quaternion e i j k) = f e `mappend` f i `mappend` f j `mappend` f k

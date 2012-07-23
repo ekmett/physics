@@ -13,6 +13,7 @@ import Data.Foldable as Foldable
 import Data.Traversable
 import Physics.Lens
 import Physics.Metric
+import Physics.Rep
 
 data AABB f a = AABB (f a) (f a) deriving (Eq,Ord,Show,Read)
 
@@ -50,6 +51,9 @@ vertices (AABB l h) = sequenceA $ liftA2 (\a b -> [a,b]) l h
 
 instance (Applicative f, Ord a) => Semigroup (AABB f a) where
   (<>) = union
+
+instance Rep f => Rep (AABB f) where
+  rep f = AABB (rep (\l -> f (lo . l))) (rep (\l -> f (hi . l)))
 
 lo, hi :: Functor g => (f a -> g (f a)) -> AABB f a -> g (AABB f a)
 lo f (AABB l h) = (`AABB` h) <$> f l

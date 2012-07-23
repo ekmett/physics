@@ -1,3 +1,4 @@
+-- | A minimal, self-contained lens library
 module Physics.Lens
   ( (^.), (%=), (^=)
   , getting
@@ -41,4 +42,3 @@ l -= n = l %= (`subtract` n)
 {-# INLINE (-=) #-}
 l *= n = l %= (* n)
 {-# INLINE (*=) #-}
-

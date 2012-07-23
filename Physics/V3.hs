@@ -15,6 +15,7 @@ import Data.Monoid
 import Physics.Metric
 import Physics.Lens
 import Physics.V2
+import Physics.Rep
 
 data V3 a = V3 a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -33,10 +34,7 @@ instance Applicative V3 where
 
 instance Monad V3 where
   return a = V3 a a a
-  V3 a b c >>= f = V3 a' b' c' where
-    V3 a' _ _ = f a
-    V3 _ b' _ = f b
-    V3 _ _ c' = f c
+  (>>=) = bindRep
 
 instance Num a => Num (V3 a) where
   (+) = liftA2 (+)
@@ -69,6 +67,9 @@ instance D2 V3 where
 instance D3 V3 where
   z f (V3 a b c) = V3 a b <$> f c
   xyz = id
+
+instance Rep V3 where
+  rep f = V3 (f x) (f y) (f z)
 
 -- | cross product
 cross :: Num a => V3 a -> V3 a -> V3 a

@@ -13,8 +13,9 @@ import Data.Foldable
 import Data.Traversable
 import Data.Monoid
 import Control.Applicative
-import Physics.Metric
 import Physics.Lens
+import Physics.Metric
+import Physics.Rep
 
 data V2 a = V2 a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -66,6 +67,9 @@ instance D2 V2 where
   x f (V2 a b) = (`V2` b) <$> f a
   y f (V2 a b) = (V2 a) <$> f b
   xy = id
+
+instance Rep V2 where
+  rep f = V2 (f x) (f y)
 
 instance Distributive V2 where
   distribute f = V2 (fmap (^.x) f) (fmap (^.y) f)

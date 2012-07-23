@@ -1,18 +1,23 @@
 module Physics.Matrix
   ( (!*!), (!*) , (*!)
-  , M44, M43, m43_to_m44, translation
+  , adjoint
+  , M44, M43, m43_to_m44
+  , trace
+  , translation
   ) where
 
 import Data.Distributive
 import Data.Functor
+import Data.Foldable as Foldable
 import Physics.V3
 import Physics.V4
 import Physics.Metric
+import Physics.Involutive
 
 infixl 7 !*!
 -- | matrix product
 (!*!) :: (Functor m, Metric r, Distributive n, Num a) => m (r a) -> r (n a) -> m (n a)
-f !*! g = fmap (\r -> fmap (dot r) g') f
+f !*! g = (\r -> fmap (dot r) g') <$> f
   where g' = distribute g
 
 -- | matrix * column vector
@@ -24,6 +29,15 @@ infixl 7 !*
 -- | row vector * matrix
 (*!) :: (Metric r, Distributive n, Num a) => r a -> r (n a) -> n a
 f *! g = dot f <$> distribute g
+
+-- | hermitian conjugate or conjugate transpose
+adjoint :: (Functor m, Distributive n, Involutive a) => m (n a) -> n (m a)
+adjoint = collect (fmap conjugate)
+{-# INLINE adjoint #-}
+
+
+trace :: (Monad f, Foldable f, Num a) => f (f a) -> a
+trace m = Foldable.sum (m >>= id)
 
 type M44 a = V4 (V4 a)
 type M43 a = V4 (V3 a)

@@ -2,9 +2,13 @@ module Physics.Simulation
   ( Simulation(..)
   ) where
 
+import Physics.V3
+
+-- simulations are defined in terms of meters, kilograms and seconds
+
 class Simulation t where
-  init   :: Double -> Double -> Double -> t
-  update :: Double -> t -> t
+  init   :: Fractional a => V3 a -> t a     -- initialize with gravity vector
+  update :: Fractional a => a -> t a -> t a
 
 {-
 

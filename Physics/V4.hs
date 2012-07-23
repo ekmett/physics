@@ -15,6 +15,7 @@ import Data.Traversable
 import Physics.V2
 import Physics.V3
 import Physics.Metric
+import Physics.Rep
 
 data V4 a = V4 a a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
 
@@ -33,11 +34,7 @@ instance Applicative V4 where
 
 instance Monad V4 where
   return a = V4 a a a a
-  V4 a b c d >>= f = V4 a' b' c' d' where
-    V4 a' _ _ _ = f a
-    V4 _ b' _ _ = f b
-    V4 _ _ c' _ = f c
-    V4 _ _ _ d' = f d
+  (>>=) = bindRep
 
 instance Num a => Num (V4 a) where
   (+) = liftA2 (+)
@@ -71,6 +68,9 @@ instance D3 V4 where
 instance D4 V4 where
   w f (V4 a b c d) = V4 a b c <$> f d
   xyzw = id
+
+instance Rep V4 where
+  rep f = V4 (f x) (f y) (f z) (f w)
 
 vector :: Num a => V3 a -> V4 a
 vector (V3 a b c) = V4 a b c 0
