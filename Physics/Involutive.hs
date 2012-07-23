@@ -14,4 +14,3 @@ instance (Involutive a, RealFloat a) => Involutive (Complex a) where
   {-# SPECIALIZE instance Involutive (Complex Float) #-}
   {-# SPECIALIZE instance Involutive (Complex Double) #-}
   conjugate (a :+ b) = conjugate a :+ negate b
-
