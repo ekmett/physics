@@ -2,20 +2,20 @@
 module Physics.V3
   ( V3(..)
   , cross, triple
-  , D2(..)
-  , D3(..)
+  , R2(..)
+  , R3(..)
   ) where
 
 import Control.Applicative
+import Control.Lens
+import Control.Lens.Rep
 import Data.Data
 import Data.Distributive
 import Data.Foldable
 import Data.Traversable
 import Data.Monoid
 import Physics.Epsilon
-import Physics.Lens
 import Physics.Metric
-import Physics.Rep
 import Physics.V2
 
 data V3 a = V3 a a a deriving (Eq,Ord,Show,Read,Data,Typeable)
@@ -56,20 +56,20 @@ instance Metric V3 where
 instance Distributive V3 where
   distribute f = V3 (fmap (^.x) f) (fmap (^.y) f) (fmap (^.z) f)
 
-class D2 t => D3 t where
+class R2 t => R3 t where
   z :: Functor f => (a -> f a) -> t a -> f (t a)
   xyz :: Functor f => (V3 a -> f (V3 a)) -> t a -> f (t a)
 
-instance D2 V3 where
+instance R2 V3 where
   x f (V3 a b c) = (\a' -> V3 a' b c) <$> f a
   y f (V3 a b c) = (\b' -> V3 a b' c) <$> f b
   xy f (V3 a b c) = (\(V2 a' b') -> V3 a' b' c) <$> f (V2 a b)
 
-instance D3 V3 where
+instance R3 V3 where
   z f (V3 a b c) = V3 a b <$> f c
   xyz = id
 
-instance Rep V3 where
+instance Representable V3 where
   rep f = V3 (f x) (f y) (f z)
 
 -- | cross product

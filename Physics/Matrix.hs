@@ -53,5 +53,5 @@ m43_to_m44
       (V4 j k l 1))
 
 -- extract the translation elements from the last row of a 4x3 or 4x4 matrix
-translation :: (D3 v, Functor f) => (V3 a -> f (V3 a)) -> V4 (v a) -> f (V4 (v a))
+translation :: (R3 v, Functor f) => (V3 a -> f (V3 a)) -> V4 (v a) -> f (V4 (v a))
 translation = w . xyz

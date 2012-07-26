@@ -3,19 +3,19 @@
 -- {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 module Physics.V2
   ( V2(..)
-  , D2(..)
+  , R2(..)
   , perp
   ) where
 
+import Control.Lens
+import Control.Lens.Rep
 import Data.Data
 import Data.Distributive
 import Data.Foldable
 import Data.Traversable
 import Data.Monoid
 import Control.Applicative
-import Physics.Lens
 import Physics.Metric
-import Physics.Rep
 import Physics.Epsilon
 
 data V2 a = V2 a a deriving (Eq,Ord,Show,Read,Data,Typeable)
@@ -35,9 +35,7 @@ instance Applicative V2 where
 
 instance Monad V2 where
   return a = V2 a a
-  V2 a b >>= f = V2 c d where
-    V2 c _ = f a
-    V2 _ d = f b
+  (>>=) = bindRep
 
 instance Num a => Num (V2 a) where
   (+) = liftA2 (+)
@@ -55,7 +53,7 @@ instance Fractional a => Fractional (V2 a) where
 instance Metric V2 where
   dot (V2 a b) (V2 c d) = a * c + b * d
 
-class D2 t where
+class R2 t where
   x :: Functor f => (a -> f a) -> t a -> f (t a)
   x = xy . x
 
@@ -64,12 +62,12 @@ class D2 t where
 
   xy :: Functor f => (V2 a -> f (V2 a)) -> t a -> f (t a)
 
-instance D2 V2 where
+instance R2 V2 where
   x f (V2 a b) = (`V2` b) <$> f a
   y f (V2 a b) = (V2 a) <$> f b
   xy = id
 
-instance Rep V2 where
+instance Representable V2 where
   rep f = V2 (f x) (f y)
 
 instance Distributive V2 where

@@ -10,12 +10,14 @@ module Physics.Quaternion
   , asinhq
   , acoshq
   , atanhq
-  , absImag
+  , absi
   , pow
   , rotate
   ) where
 
 import Control.Applicative
+import Control.Lens
+import Control.Lens.Rep
 import Data.Complex (Complex((:+)))
 import Data.Data
 import Data.Distributive
@@ -24,9 +26,7 @@ import Data.Monoid
 import Data.Traversable
 import Physics.Epsilon
 import Physics.Involutive
-import Physics.Lens
 import Physics.Metric
-import Physics.Rep
 import Physics.V3
 import Physics.Vector
 import Prelude hiding (any)
@@ -45,7 +45,7 @@ instance Monad Quaternion where
   return = pure
   (>>=) = bindRep
 
-instance Rep Quaternion where
+instance Representable Quaternion where
   rep f = Quaternion (f e) (f i) (f j) (f k)
 
 instance Foldable Quaternion where
@@ -151,9 +151,8 @@ reimagine r s (Quaternion _ i j k)
 qi :: Num a => Quaternion a -> a
 qi (Quaternion _ i j k) = i*i + j*j + k*k
 
-
-absImag :: Floating a => Quaternion a -> a
-absImag = sqrt . qi
+absi :: Floating a => Quaternion a -> a
+absi = sqrt . qi
 
 pow :: RealFloat a => Quaternion a -> a -> Quaternion a
 pow q t = exp (t *^ log q)

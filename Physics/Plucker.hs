@@ -1,7 +1,7 @@
 module Physics.Plucker
   ( Plucker(..)
   , squaredError
-  , validPlucker
+  , isotropic
   , (><)
   , plucker
   , intersects
@@ -14,7 +14,7 @@ import Data.Semigroup
 import Data.Traversable
 import Physics.Epsilon
 import Physics.Metric
-import Physics.Rep
+import Control.Lens.Rep
 import Physics.V4
 
 -- Plücker coordinates
@@ -35,7 +35,7 @@ instance Monad Plucker where
 instance Distributive Plucker where
   distribute = distributeRep
 
-instance Rep Plucker where
+instance Representable Plucker where
   rep f = Plucker (f p01) (f p02) (f p03) (f p23) (f p31) (f p12)
 
 instance Foldable Plucker where
@@ -93,8 +93,8 @@ infixl 5 ><
 (><) :: Num a => Plucker a -> Plucker a -> a
 Plucker a b c d e f >< Plucker g h i j k l = a*g+b*h+c*i-d*j-e*k-f*l
 
-validPlucker :: Epsilon a => Plucker a -> Bool
-validPlucker a = nearZero (a >< a)
+isotropic :: Epsilon a => Plucker a -> Bool
+isotropic a = nearZero (a >< a)
 
 intersects :: Epsilon a => Plucker a -> Plucker a -> Bool
 intersects a b = nearZero (a >< b)
@@ -105,4 +105,4 @@ instance Metric Plucker where
 instance Epsilon a => Epsilon (Plucker a) where
   nearZero = nearZero . quadrance
 
--- TODO: drag stuff out of my thesis
+-- TODO: drag some stuff out of my thesis
